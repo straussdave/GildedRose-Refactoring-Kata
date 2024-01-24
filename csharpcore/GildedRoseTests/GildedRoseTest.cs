@@ -31,4 +31,24 @@ public class GildedRoseTest
         Assert.AreEqual(0, items[0].Quality);
     }
 
+    //Once the sell by date has passed, `Quality` degrades twice as fast
+    [Test]
+    public void DegradeQualityTwiceAsFast()
+    {
+        var items = new List<Item> { new Item { Name = "foo", SellIn = -1, Quality = 3 } };
+        var app = new GildedRose(items);
+        app.UpdateQuality();
+        Assert.AreEqual(1, items[0].Quality);
+    }
+
+    //The `Quality` of an item is never negative
+    [Test]
+    public void QualityNeverNegative()
+    {
+        var items = new List<Item> { new Item { Name = "foo", SellIn = 0, Quality = 0 } };
+        var app = new GildedRose(items);
+        app.UpdateQuality();
+        Assert.AreEqual(0, items[0].Quality);
+    }
+
 }
