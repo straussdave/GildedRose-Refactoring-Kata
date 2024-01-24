@@ -61,4 +61,14 @@ public class GildedRoseTest
         Assert.AreEqual(1, items[0].Quality);
     }
 
+    //The `Quality` of an item is never more than `50`
+    [Test]
+    public void QualityNeverOverFifty()
+    {
+        var items = new List<Item> { new Item { Name = "Aged Brie", SellIn = 1, Quality = 50 } };
+        var app = new GildedRose(items);
+        app.UpdateQuality();
+        Assert.AreEqual(50, items[0].Quality);
+    }
+
 }
