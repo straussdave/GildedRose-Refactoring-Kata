@@ -106,4 +106,14 @@ public class GildedRoseTest
         Assert.AreEqual(13, items[0].Quality); //This one fails because there is a mistake in the program
     }
 
+    //`Quality` drops to `0` after the concert
+    [Test]
+    public void BackstagePassQualityToZeroRule()
+    {
+        var items = new List<Item> { new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 0, Quality = 10 } };
+        var app = new GildedRose(items);
+        app.UpdateQuality();
+        Assert.AreEqual(0, items[0].Quality);
+    }
+
 }
