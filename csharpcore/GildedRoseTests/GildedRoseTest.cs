@@ -82,4 +82,14 @@ public class GildedRoseTest
         Assert.AreEqual(1, items[0].SellIn);
     }
 
+    //__"Backstage passes"__, like aged brie, increases in `Quality` as its `SellIn` value approaches;
+    [Test]
+    public void BackstagePassIncreaseQualityRule()
+    {
+        var items = new List<Item> { new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 50, Quality = 10 } };
+        var app = new GildedRose(items);
+        app.UpdateQuality();
+        Assert.AreEqual(11, items[0].Quality);
+    }
+
 }
