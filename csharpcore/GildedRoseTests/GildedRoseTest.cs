@@ -116,4 +116,16 @@ public class GildedRoseTest
         Assert.AreEqual(0, items[0].Quality);
     }
 
+    //__"Conjured"__ items degrade in `Quality` twice as fast as normal items
+    [Test]
+    public void ConjuredItemsRule()
+    {
+        var items = new List<Item> { 
+            new Item { Name = "Conjured Item", SellIn = 10, Quality = 10 },
+            new Item { Name = "Conjured Item", SellIn = -1, Quality = 10 }};
+        var app = new GildedRose(items);
+        app.UpdateQuality();
+        Assert.AreEqual(8, items[0].Quality);
+        Assert.AreEqual(6, items[0].Quality);
+    }
 }
