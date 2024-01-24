@@ -19,4 +19,16 @@ public class GildedRoseTest
         Assert.AreEqual(0, items[0].SellIn);
         Assert.AreEqual(0, items[0].SellIn);
     }
+
+    //At the end of each day our system lowers both values for every item
+    [Test]
+    public void LowerValues()
+    {
+        var items = new List<Item> { new Item { Name = "foo", SellIn = 1, Quality = 1 } };
+        var app = new GildedRose(items);
+        app.UpdateQuality();
+        Assert.AreEqual(0, items[0].SellIn);
+        Assert.AreEqual(0, items[0].Quality);
+    }
+
 }
