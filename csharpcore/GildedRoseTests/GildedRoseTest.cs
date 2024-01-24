@@ -51,4 +51,14 @@ public class GildedRoseTest
         Assert.AreEqual(0, items[0].Quality);
     }
 
+    //__"Aged Brie"__ actually increases in `Quality` the older it gets
+    [Test]
+    public void AgedBrieRule()
+    {
+        var items = new List<Item> { new Item { Name = "Aged Brie", SellIn = 1, Quality = 0 } };
+        var app = new GildedRose(items);
+        app.UpdateQuality();
+        Assert.AreEqual(1, items[0].Quality);
+    }
+
 }
