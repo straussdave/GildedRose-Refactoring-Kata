@@ -92,4 +92,18 @@ public class GildedRoseTest
         Assert.AreEqual(11, items[0].Quality);
     }
 
+    //`Quality` increases by `2` when there are `10` days or less and by `3` when there are `5` days or less but
+    [Test]
+    public void BackstagePassIncreaseQualityFasterRule()
+    {
+        var items = new List<Item> {
+            new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 10, Quality = 10 },
+            new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 5, Quality = 10 }
+        };
+        var app = new GildedRose(items);
+        app.UpdateQuality();
+        Assert.AreEqual(12, items[0].Quality);
+        Assert.AreEqual(13, items[0].Quality); //This one fails because there is a mistake in the program
+    }
+
 }
