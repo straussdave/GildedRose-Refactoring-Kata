@@ -1,93 +1,83 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GildedRoseKata
 {
-    public enum ItemType
-    {
-        Normal,
-        AgedBrie,
-        BackstagePass,
-        Sulfuras
-    }
-
-    public class Item
-    {
-        public string Name { get; set; }
-        public int SellIn { get; set; }
-        public int Quality { get; set; }
-        public ItemType Type { get; set; }
-    }
-
     public class GildedRose
     {
-        private IList<Item> items;
+        internal IList<Item> Items;
 
         public GildedRose(IList<Item> items)
         {
-            this.items = items;
+            this.Items = items;
         }
 
         public void UpdateQuality()
         {
-            foreach (var item in items)
+            foreach (var item in Items)
             {
-                switch (item.Type)
+                UpdateSellIn(item);
+                UpdateQuality(item);
+            }
+        }
+
+        private void UpdateSellIn(Item item)
+        {
+            if (item.Name != "Sulfuras, Hand of Ragnaros")
+            {
+                item.SellIn--;
+            }
+        }
+
+        private void UpdateQuality(Item item)
+        {
+            if (item.Quality == 0 || item.Name == "Sulfuras, Hand of Ragnaros") return;
+
+            if (item.Name == "Aged Brie")
+            {
+                item.Quality = Math.Min(item.Quality + 1, 50);
+            }
+            else if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
+            {
+                HandleBackstageItemsQuality(item);
+            }
+            else
+            {
+                item.Quality = Math.Max(item.Quality - 1, 0);
+            }
+
+            if (item.SellIn < 0)
+            {
+                if (item.Name == "Aged Brie")
                 {
-                    case ItemType.Normal:
-                        UpdateNormalItem(item);
-                        break;
-
-                    case ItemType.AgedBrie:
-                        UpdateAgedBrieItem(item);
-                        break;
-
-                    case ItemType.BackstagePass:
-                        UpdateBackstagePassItem(item);
-                        break;
-
-                    case ItemType.Sulfuras:
-                        break; // Sulfuras, Hand of Ragnaros does not change in quality
-
+                    item.Quality = Math.Min(item.Quality + 1, 50);
+                }
+                else if (item.Name == "Backstage passes to a TAFKAL80ETC concert")
+                {
+                    item.Quality = 0;
+                }
+                else
+                {
+                    item.Quality = Math.Max(item.Quality - 1, 0);
                 }
             }
         }
 
-        private static void UpdateNormalItem(Item item)
+        private void HandleBackstageItemsQuality(Item item)
         {
-            if (item.Quality > 0)
-            {
-                item.Quality = item.SellIn < 0
-                 ? item.Quality - 2
-                  : item.Quality - 1;
-            }
-        }
+            item.Quality++;
 
-        private static void UpdateAgedBrieItem(Item item)
-        {
-            if (item.Quality < 50)
+            if (item.SellIn < 11)
             {
                 item.Quality++;
             }
-        }
 
-        private static void UpdateBackstagePassItem(Item item)
-        {
-            if (item.Quality < 50)
+            if (item.SellIn < 6)
             {
                 item.Quality++;
-
-                if (item.SellIn < 11)
-                {
-                    item.Quality < 50 && item.Quality++;
-                }
-
-                if (item.SellIn < 6)
-                {
-                    item.Quality < 50 && item.Quality++;
-                }
             }
 
-            item.Quality = item.SellIn < 0 ? 0 : item.Quality;
+            item.Quality = Math.Min(item.Quality, 50);
         }
     }
 }
